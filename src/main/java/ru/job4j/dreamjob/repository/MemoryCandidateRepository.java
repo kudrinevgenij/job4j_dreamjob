@@ -7,11 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class MemoryCandidateRepository implements CandidateRepository {
 
-    private int nextId = 1;
+    private AtomicInteger nextId = new AtomicInteger(1);
 
     private final Map<Integer, Candidate> candidates = new HashMap<>();
 
@@ -23,7 +24,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     @Override
     public Candidate save(Candidate candidate) {
-        candidate.setId(nextId++);
+        candidate.setId(nextId.getAndIncrement());
         candidates.put(candidate.getId(), candidate);
         return candidate;
     }
